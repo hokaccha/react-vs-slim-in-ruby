@@ -1,15 +1,15 @@
 require 'v8'
-require 'json'
 require 'oj'
 
-$react_source = File.read("./node_modules/react/dist/react.min.js")
 class ReactRenderer
   def initialize
+    react_source = File.read("./node_modules/react/dist/react.min.js")
+
     @ctx = V8::Context.new
     @ctx.eval """
       var global = {};
     """
-    @ctx.eval $react_source
+    @ctx.eval react_source
     @ctx.eval """
       var React = global.React;
     """
@@ -27,16 +27,17 @@ class ReactRenderer
   end
 end
 
-r = ReactRenderer.new
-r.register "foo", File.read('templates/foo.js')
+class BenchmarkReact
+  def initialize
+    @r = ReactRenderer.new
+    @r.register "foo", File.read('templates/foo.js')
+  end
 
-# benchmark
-require "time"
-start = Time.now.to_f
-N = 100000
-N.times do
-  r.render("foo", {name: "Hoge", items: [1, 3, 4]})
+  def run
+    @r.render("foo", {name: "Hoge", items: [1, 3, 4]})
+  end
 end
-ret = Time.now.to_f - start
-p ret
-p ret/N
+
+if __FILE__ == $0
+  puts BenchmarkReact.new.run
+end

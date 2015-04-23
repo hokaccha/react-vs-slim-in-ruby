@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    benchmark-ips (2.1.1)
     coderay (1.1.0)
     daemons (1.1.9)
     execjs (2.2.2)
@@ -32,6 +33,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  benchmark-ips
   execjs
   haml
   libv8

@@ -1,11 +1,15 @@
 require 'slim'
-require "time"
 
-r = Slim::Template.new('templates/foo.slim')
+class BenchmarkSlim
+  def initialize
+    @r = Slim::Template.new('templates/foo.slim')
+  end
 
-# benchmark
-start = Time.now.to_f
-100000.times do
-  r.render(self, name: "foo", items: [1,2,3])
+  def run
+    @r.render(self, name: "foo", items: [1,2,3])
+  end
 end
-p Time.now.to_f - start
+
+if __FILE__ == $0
+  puts BenchmarkSlim.new.run
+end

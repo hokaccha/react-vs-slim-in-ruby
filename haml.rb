@@ -1,11 +1,15 @@
 require 'haml'
-require "time"
 
-r = Haml::Engine.new(File.read('templates/foo.haml'))
+class BenchmarkHaml
+  def initialize
+    @r = Haml::Engine.new(File.read('templates/foo.haml'))
+  end
 
-# benchmark
-start = Time.now.to_f
-100000.times do
-  r.render(self, name: "foo", items: [1,2,3])
+  def run
+    @r.render(self, name: "foo", items: [1,2,3])
+  end
 end
-p Time.now.to_f - start
+
+if __FILE__ == $0
+  puts BenchmarkHaml.new.run
+end
